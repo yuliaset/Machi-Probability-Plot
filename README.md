@@ -1,626 +1,127 @@
-Win Probability in Riichi Mahjong
-This document explains the mathematical deduction of the formulas used to calculate the probability that a player eventually wins by drawing a winning tile from the wall under the following assumptions:
+# Win Probability in Riichi Mahjong
 
-Wall: There are 
-𝑅
-R tiles remaining.
-Winning Tiles: 
-𝑛
-n copies of the winning tile are still available.
-Cycle: A “cycle” (or turn) consists of:
-Player's Draw: You draw one tile. You win immediately if you draw one of the 
-𝑛
-n winning tiles, with probability
-𝑛
-𝑅
-.
-R
-n
-​
- .
-Opponents' Draws: If you do not win, three opponents each draw one tile from the remaining 
-𝑅
-−
-1
-R−1 tiles. The probability that all three opponents miss (i.e. none of them draws a winning tile) is given by the hypergeometric probability:
-(
-𝑅
-−
-1
-−
-𝑛
-3
-)
-(
-𝑅
-−
-1
-3
-)
-.
-( 
-3
-R−1
-​
- )
-( 
-3
-R−1−n
-​
- )
-​
- .
-Thus, the probability that no winning tile is drawn in a given cycle is
+This document explains the mathematical deduction of the formulas used to calculate the probability that **you** eventually win by drawing a winning tile in a Riichi Mahjong scenario. The model considers the following:
 
-𝑄
-(
-𝑅
-,
-𝑛
-)
-=
-(
-1
-−
-𝑛
-𝑅
-)
-(
-𝑅
-−
-1
-−
-𝑛
-3
-)
-(
-𝑅
-−
-1
-3
-)
-.
-Q(R,n)=(1− 
-R
-n
-​
- ) 
-( 
-3
-R−1
-​
- )
-( 
-3
-R−1−n
-​
- )
-​
- .
-Derivation of the Cumulative Win Probability
-If the cycle ends with no winning tile being drawn by anyone, the wall decreases by 4 tiles (1 from your draw and 3 from your opponents' draws). Let the cumulative probability that you win within 
-𝑘
-k cycles be denoted by 
-𝑃
-𝑘
-(
-𝑅
-,
-𝑛
-)
-P 
-k
-​
- (R,n).
+- **Wall:** There are \( R \) tiles remaining.
+- **Winning Tiles:** \( n \) copies of the winning tile are still available.
+- **Cycle:** A “cycle” (or turn) consists of:
+  - **Your Draw:** You draw one tile.
+  - **Opponents' Draws:** Three opponents each draw one tile.
 
-Probability of Winning in a Single Cycle
-Cycle 
-𝑖
-i:
-At the start of cycle 
-𝑖
-i, the wall has
+The goal is to compute the cumulative probability that you win (i.e., that you draw the winning tile on your turn) over multiple cycles.
 
-𝑅
-𝑖
-=
-𝑅
-−
-4
-𝑖
-tiles
-,
-R 
-i
-​
- =R−4itiles,
-and still 
-𝑛
-n winning tiles remain.
-On cycle 
-𝑖
-i, your probability of drawing a winning tile is
+## Mathematical Derivation
 
-𝑛
-𝑅
-𝑖
-.
-R 
-i
-​
- 
-n
-​
- .
-Survival to Cycle 
-𝑖
-i:
-In order to reach cycle 
-𝑖
-i, no winning tile must have been drawn in all previous cycles. The probability of “surviving” cycle 
-𝑗
-j is 
-𝑄
-(
-𝑅
-−
-4
-𝑗
-,
-𝑛
-)
-Q(R−4j,n). Hence, the probability of reaching cycle 
-𝑖
-i is
+### 1. Single Cycle
 
-∏
-𝑗
-=
-0
-𝑖
-−
-1
-𝑄
-(
-𝑅
-−
-4
-𝑗
-,
-𝑛
-)
-,
-j=0
-∏
-i−1
-​
- Q(R−4j,n),
-where by convention an empty product (for 
-𝑖
-=
-0
-i=0) is taken as 
-1
-1.
+At the beginning of a cycle:
+- There are \( R \) tiles remaining.
+- There are \( n \) winning tiles available.
 
-Cumulative Win Probability
-The probability that you win on cycle 
-𝑖
-i is then
+#### Your Draw
 
-(
-∏
-𝑗
-=
-0
-𝑖
-−
-1
-𝑄
-(
-𝑅
-−
-4
-𝑗
-,
-𝑛
-)
-)
-𝑛
-𝑅
-−
-4
-𝑖
-.
-( 
-j=0
-∏
-i−1
-​
- Q(R−4j,n)) 
-R−4i
-n
-​
- .
-Summing the contributions over the first 
-𝑘
-k cycles gives:
+The probability that you draw a winning tile is:
+\[
+\frac{n}{R}.
+\]
 
-𝑃
-𝑘
-(
-𝑅
-,
-𝑛
-)
-=
-∑
-𝑖
-=
-0
-𝑘
-−
-1
-(
-∏
-𝑗
-=
-0
-𝑖
-−
-1
-𝑄
-(
-𝑅
-−
-4
-𝑗
-,
-𝑛
-)
-)
-𝑛
-𝑅
-−
-4
-𝑖
-,
-P 
-k
-​
- (R,n)= 
-i=0
-∑
-k−1
-​
- ( 
-j=0
-∏
-i−1
-​
- Q(R−4j,n)) 
-R−4i
-n
-​
- ,
-​
- 
+#### Opponents' Draws
+
+If you **do not** draw a winning tile (with probability \( 1 - \frac{n}{R} \)), the three opponents each draw one tile from the remaining \( R - 1 \) tiles. The probability that **none** of them draws a winning tile is given by the hypergeometric probability:
+\[
+\frac{\binom{R-1-n}{3}}{\binom{R-1}{3}}.
+\]
+
+Thus, the probability that **no winning tile is drawn** in a given cycle is:
+\[
+Q(R, n) = \left(1 - \frac{n}{R}\right) \frac{\binom{R-1-n}{3}}{\binom{R-1}{3}}.
+\]
+
+### 2. Cumulative Win Probability Over \( k \) Cycles
+
+After each cycle, if no winning tile is drawn by anyone, the wall decreases by 4 tiles (1 by you and 3 by the opponents). Denote the state at cycle \( i \) by:
+\[
+R_i = R - 4i.
+\]
+At cycle \( i \), the probability that you win on your draw is:
+\[
+\frac{n}{R_i} = \frac{n}{R - 4i}.
+\]
+
+To reach cycle \( i \), no winning tile must have been drawn in all previous cycles. The probability of surviving (i.e., reaching cycle \( i \)) is:
+\[
+\prod_{j=0}^{i-1} Q(R-4j, n).
+\]
+
+Thus, the probability that you win **in cycle \( i \)** is:
+\[
+\left(\prod_{j=0}^{i-1} Q(R-4j, n)\right) \frac{n}{R-4i}.
+\]
+
+Summing the contributions from cycles \( 0 \) to \( k-1 \), the cumulative win probability is:
+\[
+\boxed{P_k(R,n)=\sum_{i=0}^{k-1}\left(\prod_{j=0}^{i-1} Q(R-4j,n)\right)\frac{n}{R-4i},}
+\]
 where
+\[
+Q(R-4j, n)=\left(1-\frac{n}{R-4j}\right)\frac{\binom{(R-4j)-1-n}{3}}{\binom{(R-4j)-1}{3}}.
+\]
 
-𝑄
-(
-𝑅
-−
-4
-𝑗
-,
-𝑛
-)
-=
-(
-1
-−
-𝑛
-𝑅
-−
-4
-𝑗
-)
-(
-(
-𝑅
-−
-4
-𝑗
-)
-−
-1
-−
-𝑛
-3
-)
-(
-(
-𝑅
-−
-4
-𝑗
-)
-−
-1
-3
-)
-.
-Q(R−4j,n)=(1− 
-R−4j
-n
-​
- ) 
-( 
-3
-(R−4j)−1
-​
- )
-( 
-3
-(R−4j)−1−n
-​
- )
-​
- .
-Example: 
-𝑅
-=
-70
-R=70 and 
-𝑛
-=
-8
-n=8
-Let’s work through the first few cycles:
+## Example: \( R = 70 \) and \( n = 8 \)
 
-Cycle 0 (
-𝑖
-=
-0
-i=0):
-Wall: 
-𝑅
-0
-=
-70
-R 
-0
-​
- =70
-Player's win probability:
-8
-70
-≈
-0.1143.
-70
-8
-​
- ≈0.1143.
-Contribution:
-Since no previous cycle exists, the contribution is 
-0.1143
-0.1143.
-Cycle 1 (
-𝑖
-=
-1
-i=1):
-Wall: 
-𝑅
-1
-=
-70
-−
-4
-=
-66
-R 
-1
-​
- =70−4=66
-Player's win probability:
-8
-66
-≈
-0.1212.
-66
-8
-​
- ≈0.1212.
-Opponents' Draws (Cycle 0):
-The probability that no winning tile is drawn in cycle 0 is:
-𝑄
-(
-70
-,
-8
-)
-=
-(
-1
-−
-8
-70
-)
-(
-69
-−
-8
-3
-)
-(
-69
-3
-)
-Q(70,8)=(1− 
-70
-8
-​
- ) 
-( 
-3
-69
-​
- )
-( 
-3
-69−8
-​
- )
-​
- 
-where
-(
-61
-3
-)
-≈
-35990
-,
-(
-69
-3
-)
-≈
-52394.
-( 
-3
-61
-​
- )≈35990,( 
-3
-69
-​
- )≈52394.
-Thus,
-𝑄
-(
-70
-,
-8
-)
-≈
-62
-70
-×
-35990
-52394
-≈
-0.8857
-×
-0.687
-≈
-0.608.
-Q(70,8)≈ 
-70
-62
-​
- × 
-52394
-35990
-​
- ≈0.8857×0.687≈0.608.
-Contribution for Cycle 1:
-0.608
-×
-0.1212
-≈
-0.0737.
-0.608×0.1212≈0.0737.
-Cycle 2 (
-𝑖
-=
-2
-i=2):
-Wall: 
-𝑅
-2
-=
-70
-−
-8
-=
-62
-R 
-2
-​
- =70−8=62
-Player's win probability:
-8
-62
-≈
-0.1290.
-62
-8
-​
- ≈0.1290.
-Cumulative Survival to Cycle 2:
-From cycles 0 and 1, survival probability is:
-𝑄
-(
-70
-,
-8
-)
-×
-𝑄
-(
-66
-,
-8
-)
-(say 
-0.608
-×
-0.587
-≈
-0.357
-)
-.
-Q(70,8)×Q(66,8)(say 0.608×0.587≈0.357).
-Contribution for Cycle 2:
-0.357
-×
-0.1290
-≈
-0.0461.
-0.357×0.1290≈0.0461.
-Cumulative Probability
-Summing the contributions:
+Let's work through the first few cycles:
 
-𝑃
-3
-(
-70
-,
-8
-)
-≈
-0.1143
-+
-0.0737
-+
-0.0461
-≈
-0.2341.
-P 
-3
-​
- (70,8)≈0.1143+0.0737+0.0461≈0.2341.
-Continuing in this manner for more cycles (up to the maximum 
-𝑘
-≈
-⌊
-70
-/
-4
-⌋
-=
-17
-k≈⌊70/4⌋=17) shows that the cumulative win probability converges to approximately 29.6%.
+### Cycle 0 (\( i = 0 \))
+- **Wall:** \( R_0 = 70 \)
+- **Player's win probability:**
+  \[
+  \frac{8}{70} \approx 0.1143.
+  \]
+- **Contribution:**  
+  \( 0.1143 \) (since there are no previous cycles).
+
+### Cycle 1 (\( i = 1 \))
+- **Wall:** \( R_1 = 70 - 4 = 66 \)
+- **Player's win probability:**
+  \[
+  \frac{8}{66} \approx 0.1212.
+  \]
+- **Probability that Cycle 0 passes:**
+  \[
+  Q(70,8)=\left(1-\frac{8}{70}\right)\frac{\binom{69-8}{3}}{\binom{69}{3}}.
+  \]
+  Approximating the combinatorial terms:
+  - \(\binom{61}{3} \approx 35990\),
+  - \(\binom{69}{3} \approx 52394\),
+  
+  we get:
+  \[
+  Q(70,8) \approx \frac{62}{70} \times \frac{35990}{52394} \approx 0.8857 \times 0.687 \approx 0.608.
+  \]
+- **Contribution for Cycle 1:**
+  \[
+  0.608 \times 0.1212 \approx 0.0737.
+  \]
+
+### Cycle 2 (\( i = 2 \))
+- **Wall:** \( R_2 = 70 - 8 = 62 \)
+- **Player's win probability:**
+  \[
+  \frac{8}{62} \approx 0.1290.
+  \]
+- **Cumulative survival probability to Cycle 2:**
+  \[
+  Q(70,8) \times Q(66,8) \quad (\text{assume } \approx 0.608 \times 0.587 \approx 0.357).
+  \]
+- **Contribution for Cycle 2:**
+  \[
+  0.357 \times 0.1290 \approx 0.0461.
+  \]
+
+### Cumulative Probability
+
+Summing the contributions from cycles 0, 1, and 2:
+\[
+P_3(70,8) \approx 0.1143 + 0.0737 + 0.0461 \approx 0.2341.
+\]
+Continuing this process for up to about 17 cycles (since \(\lfloor 70/4 \rfloor = 17\)) shows that the cumulative win probability converges to approximately **29.6%**.
