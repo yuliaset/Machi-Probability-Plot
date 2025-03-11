@@ -32,20 +32,20 @@ max_cycles = R_initial // 4
 cycles = list(range(max_cycles + 1))
 P_values_correct = [P_k_correct(R_initial, n_initial, k) for k in cycles]
 
-print("Correct cumulative win probabilities per cycle:")
+print("Cumulative win probabilities per cycle:")
 for k, p in zip(cycles, P_values_correct):
     print(f"Cycle {k}: {p}")
 
 P_one_draw = n_initial / R_initial
 
 plt.figure(figsize=(8, 5))
-plt.plot(cycles, P_values_correct, marker='o', linestyle='-', label='Your win probability $P_k(70,8)$')
-plt.title('Probability of YOU winning vs. Number of Cycles')
+plt.plot(cycles, P_values_correct, marker='o', linestyle='-', label='Win probability $P_k(70,8)$')
+plt.title('Draw Probability vs. Number of Cycles')
 plt.axhline(P_one_draw, color='red', linestyle='--', label=f'Single Draw: {P_one_draw:.2f}')
 plt.xlabel('Number of cycles (k)')
 plt.ylabel('Probability')
 plt.xticks(cycles)
 plt.legend()
 plt.grid(True)
-plt.savefig('your_win_probability.png')
+plt.savefig('graph.png')
 plt.show()
